@@ -117,7 +117,7 @@ class MemoryStorage(SyncStorage):
             self.__raise_exception(KeyExistError("Key already exist"), kwargs)
         self.storage[key] = self.__make_key_body(timestamp)
 
-    def return_key(self, key:str, timestamp: datetime.datetime = None, **kwargs):
+    def return_key(self, key: str, timestamp: datetime.datetime = None, **kwargs):
         """ Return a key to the storage with an updated timestamp.
 
         This method returns a key to the storage and updates its timestamp. If the key is not found in the
