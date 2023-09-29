@@ -96,7 +96,6 @@ def with_key_from_storage(storage: SyncStorage | str = None):
                     r = storage.get_first_busy_key(soft_error=False)
                     api_key, next_free_key_dt = r
                     current_time = datetime.datetime.utcnow()
-                    print(next_free_key_dt)
                     # Get waiting time and increase by 1s ( fot fix bug with ms)
                     time.sleep((next_free_key_dt - current_time).total_seconds() + 1)
                 try:
