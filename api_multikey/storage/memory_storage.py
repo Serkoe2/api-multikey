@@ -51,7 +51,7 @@ class MemoryStorage(SyncStorage):
         self.__raise_exception(KeyNotFoundError("Available keys not found"), kwargs)
         return None
 
-    def get_first_busy_key(self, timestamp: datetime.datetime = None, **kwargs) -> str | None:
+    def get_first_busy_key(self, timestamp: datetime.datetime = None, **kwargs) -> list | None:
         """Get the first unlocked key from the storage with a timestamp greater than or equal to the specified timestamp.
 
         This method retrieves the first key from the storage where the timestamp is greater than or equal to the
@@ -82,7 +82,7 @@ class MemoryStorage(SyncStorage):
         for key in keys_sorted_by_timestamp:
             if self.storage[key]['timestamp'] >= timestamp and not self.storage[key]['is_locked']:
                 self.storage[key]['is_locked'] = True
-                return key
+                return [key, self.storage[key]['timestamp']]
 
         self.__raise_exception(KeyNotFoundError("Available keys not found"), kwargs)
         return None

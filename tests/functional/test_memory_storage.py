@@ -93,11 +93,11 @@ def test_get_first_busy_key(memory_storage):
     # Разблокируем key1
     memory_storage.storage[key1]['is_locked'] = False
 
-    print(memory_storage.storage)
     # Попытка получить первый доступный ключ с текущим временем должна вернуть key1
     current_time = datetime.datetime(2023, 9, 30, 12, 0, 0)
     result_key = memory_storage.get_first_busy_key(timestamp=current_time)
-    assert result_key == key1
+    assert result_key[0] == key1
+    assert result_key[1] == timestamp1
 
     # Блокируем key1
     memory_storage.storage[key1]['is_locked'] = True
@@ -108,7 +108,8 @@ def test_get_first_busy_key(memory_storage):
     # Попытка получить первый доступный ключ с текущим временем должна вернуть key2
     current_time = datetime.datetime(2023, 9, 30, 12, 0, 0)
     result_key = memory_storage.get_first_busy_key(timestamp=current_time)
-    assert result_key == key2
+    assert result_key[0] == key2
+    assert result_key[1] == timestamp2
 
     # Блокируем key2
     memory_storage.storage[key2]['is_locked'] = True
@@ -119,7 +120,8 @@ def test_get_first_busy_key(memory_storage):
     # Попытка получить первый доступный ключ с текущим временем должна вернуть key3
     current_time = datetime.datetime(2023, 9, 30, 12, 0, 0)
     result_key = memory_storage.get_first_busy_key(timestamp=current_time)
-    assert result_key == key3
+    assert result_key[0] == key3
+    assert result_key[1] == timestamp3
 
     # Блокируем key3
     memory_storage.storage[key3]['is_locked'] = True
