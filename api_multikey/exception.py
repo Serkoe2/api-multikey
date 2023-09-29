@@ -4,3 +4,7 @@ class StorageNotFound(Exception):
 
 class ArgumentsError(Exception):
     pass
+
+
+class APIKeyError(Exception):
+    pass
