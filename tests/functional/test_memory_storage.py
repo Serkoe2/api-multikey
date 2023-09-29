@@ -140,7 +140,11 @@ def test_return_key(memory_storage):
 
     # Возвращаем ключ с обновленным временем
     new_timestamp = datetime.datetime(2023, 9, 30, 12, 30, 0)
+
     memory_storage.return_key(key, timestamp=new_timestamp)
+    assert memory_storage.storage[key]['timestamp'] == new_timestamp
+
+    memory_storage.return_key(key, timestamp=new_timestamp, need_cold=True)
 
     # Убеждаемся, что ключ обновлен
     assert memory_storage.storage[key]['timestamp'] == new_timestamp + datetime.timedelta(minutes=1)

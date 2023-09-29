@@ -117,10 +117,10 @@ class MemoryStorage(SyncStorage):
             self.__raise_exception(KeyExistError("Key already exist"), kwargs)
         self.storage[key] = self.__make_key_body(timestamp)
 
-    def return_key(self, key: str, timestamp: datetime.datetime = None, **kwargs):
+    def return_key(self, key: str, timestamp: datetime.datetime = None, need_cold: bool = False, **kwargs):
         """ Return a key to the storage with an updated timestamp.
 
-        This method returns a key to the storage and updates its timestamp. If the key is not found in the
+        This method returns a key to the storage and updates its timestamp ( if need_cold is True). If the key is not found in the
         storage, it raises a 'Key not Found' exception. Unlock returned key
 
         Optionally, you can specify a new timestamp for the key. If not provided, the current UTC timestamp
@@ -133,6 +133,9 @@ class MemoryStorage(SyncStorage):
             A timestamp to update the key with. If not provided, the current UTC timestamp will be used,
             and it will be increased by the 'base_limit' if provided.
 
+        :param need_cold: bool, optional
+            If params true, next usage that key will be set after base_limit
+
         :param kwargs: dict, optional
             Additional keyword arguments that can be passed to customize the behavior of the function ( See __init__ )
 
@@ -144,10 +147,12 @@ class MemoryStorage(SyncStorage):
         if key not in self.storage:
             self.__raise_exception(KeyNotFoundError("Key not Found"), kwargs)
 
-        base_limit = kwargs['base_limit'] if 'base_limit' in kwargs else self.base_limit
         if timestamp is None:
             timestamp = datetime.datetime.utcnow()
-        timestamp = timestamp + datetime.timedelta(seconds=base_limit)
+
+        if need_cold:
+            base_limit = kwargs['base_limit'] if 'base_limit' in kwargs else self.base_limit
+            timestamp = timestamp + datetime.timedelta(seconds=base_limit)
 
         self.storage[key] = self.__make_key_body(timestamp)
 
