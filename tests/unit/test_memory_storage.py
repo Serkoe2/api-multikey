@@ -25,6 +25,10 @@ def test_add_key(memory_storage):
     with pytest.raises(KeyExistError):
         memory_storage.add_key(key, timestamp=timestamp)
 
+    # Проверка, что timestamp добавляется автоматически
+    memory_storage.add_key('test_key_2')
+    assert isinstance(memory_storage.storage['test_key']['timestamp'], datetime.datetime)
+
 
 def test_get_first_key(memory_storage):
     key1 = 'key1'
@@ -61,10 +65,11 @@ def test_get_first_key(memory_storage):
     result_key = memory_storage.get_first_key(timestamp=current_time)
     assert result_key == key3
 
-    # # # Попытка получить первый доступный ключ с текущим временем, когда нет доступных ключей, должна вызвать исключение KeyNotFoundError
+    # Попытка получить первый доступный ключ с текущим временем, когда нет доступных ключей, должна вызвать исключение KeyNotFoundError
     with pytest.raises(KeyNotFoundError):
         current_time = datetime.datetime(2023, 9, 30, 12, 50, 0)
         result_key = memory_storage.get_first_key(timestamp=current_time)
+
 
 
 def test_get_first_busy_key(memory_storage):

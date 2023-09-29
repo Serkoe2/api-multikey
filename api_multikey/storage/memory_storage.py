@@ -115,6 +115,10 @@ class MemoryStorage(SyncStorage):
             """
         if key in self.storage:
             self.__raise_exception(KeyExistError("Key already exist"), kwargs)
+
+        if timestamp is None:
+            timestamp = datetime.datetime.utcnow()
+
         self.storage[key] = self.__make_key_body(timestamp)
 
     def return_key(self, key: str, timestamp: datetime.datetime = None, need_cold: bool = False, **kwargs):
